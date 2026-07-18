@@ -1,0 +1,27 @@
+{
+  "name": "checkedby",
+  "version": "1.0.0",
+  "description": "CheckedBy — the peer-to-peer human verification marketplace for AI-generated work.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "smoke": "node scripts/smoke.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "keywords": [
+    "marketplace",
+    "ai-verification",
+    "human-review",
+    "eu-ai-act"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}
