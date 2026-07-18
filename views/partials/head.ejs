@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= typeof pageTitle !== 'undefined' ? pageTitle + ' · CheckedBy' : 'CheckedBy — Human verification for AI work' %></title>
+<meta name="description" content="CheckedBy is the peer-to-peer marketplace where real, vetted experts review and sign off on AI-generated work — with a public verification certificate for every job.">
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='11' fill='%2317b890'/><path d='M7 12.5l3.2 3.2L17 8.5' stroke='%230d1b2a' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="logo" href="/"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#0d1b2a" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>CheckedBy</a>
+    <a class="nl <%= page==='jobs' ? 'on':'' %>" href="/jobs">Marketplace</a>
+    <a class="nl <%= page==='verify' ? 'on':'' %>" href="/verify">Verify a certificate</a>
+    <div class="spacer"></div>
+    <% if (user) { %>
+      <a class="nl <%= page==='dashboard' ? 'on':'' %>" href="/dashboard"><%= user.name.split(' ')[0] %> · <%= fmtMoney(user.balance_cents) %></a>
+      <a class="btn small" href="/jobs/new">Post work</a>
+      <form method="post" action="/logout" style="margin:0"><button class="btn ghost small" type="submit">Log out</button></form>
+    <% } else { %>
+      <a class="nl" href="/login">Log in</a>
+      <a class="btn small" href="/signup">Get started</a>
+    <% } %>
+  </div>
+</nav>
