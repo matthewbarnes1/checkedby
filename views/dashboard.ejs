@@ -1,0 +1,64 @@
+<%- include('partials/head', { pageTitle: 'Dashboard' }) %>
+<div class="wrap" style="padding-top:46px; padding-bottom:80px">
+  <div class="dash-head">
+    <div>
+      <h2 class="title" style="margin-bottom:4px"><%= user.name %></h2>
+      <div style="color:var(--slate)"><%= user.title || 'One account, both sides of the market.' %></div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:1.6rem; font-weight:800; color:var(--green-dark)"><%= fmtMoney(user.balance_cents) %></div>
+      <div style="color:var(--slate); font-size:.85rem">wallet balance (demo credits)</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <a class="btn small" href="/jobs/new">Post work for verification</a>
+    <a class="btn ghost small" href="/jobs">Browse open jobs to review</a>
+    <a class="btn ghost small" href="/u/<%= user.id %>">My public reviewer profile</a>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">Work I've posted</h3>
+    <% if (!myJobs.length) { %><p style="color:var(--slate)">Nothing yet. <a href="/jobs/new">Post your first job</a> — your $100 demo credit covers it.</p><% } %>
+    <% if (myJobs.length) { %>
+      <table class="plain"><tr><th>Job</th><th>Bounty</th><th>Status</th><th></th></tr>
+      <% for (const j of myJobs) { %>
+        <tr>
+          <td><a href="/jobs/<%= j.id %>"><%= j.title %></a></td>
+          <td><%= fmtMoney(j.bounty_cents) %></td>
+          <td><% if (j.status==='submitted') { %><span class="tag amber">Action needed — review awaiting your acceptance</span><% } else { %><span class="tag cat"><%= j.status %></span><% } %></td>
+          <td><a href="/jobs/<%= j.id %>">Open →</a></td>
+        </tr>
+      <% } %></table>
+    <% } %>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">Work I'm reviewing</h3>
+    <% if (!myReviews.length) { %><p style="color:var(--slate)">No claimed jobs. <a href="/jobs">Find one that matches your expertise.</a></p><% } %>
+    <% if (myReviews.length) { %>
+      <table class="plain"><tr><th>Job</th><th>Payout</th><th>Status</th><th></th></tr>
+      <% for (const j of myReviews) { %>
+        <tr>
+          <td><a href="/jobs/<%= j.id %>"><%= j.title %></a></td>
+          <td><%= fmtMoney(Math.round(j.bounty_cents * 0.85)) %></td>
+          <td><% if (j.status==='claimed') { %><span class="tag amber">Action needed — submit your review</span><% } else { %><span class="tag cat"><%= j.status %></span><% } %></td>
+          <td><a href="/jobs/<%= j.id %>">Open →</a></td>
+        </tr>
+      <% } %></table>
+    <% } %>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">Transactions</h3>
+    <% if (!txs.length) { %><p style="color:var(--slate)">No transactions yet.</p><% } %>
+    <% if (txs.length) { %>
+      <table class="plain"><tr><th>When</th><th>Type</th><th>Amount</th><th>Note</th></tr>
+      <% for (const t of txs) { %>
+        <tr><td><%= t.created_at %></td><td><span class="tag cat"><%= t.kind %></span></td>
+        <td style="color:<%= t.amount_cents >= 0 ? 'var(--green-dark)' : 'var(--red)' %>; font-weight:700"><%= (t.amount_cents >= 0 ? '+' : '') + (t.amount_cents/100).toFixed(2) %></td>
+        <td style="color:var(--slate)"><%= t.note %></td></tr>
+      <% } %></table>
+    <% } %>
+  </div>
+</div>
+<%- include('partials/foot') %>

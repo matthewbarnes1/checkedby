@@ -1,0 +1,100 @@
+<%- include('partials/head', { pageTitle: job.title }) %>
+<div class="wrap" style="max-width:820px; padding-top:46px; padding-bottom:80px">
+  <div class="kicker"><%= CATEGORIES[job.category].label %></div>
+  <h2 class="title" style="margin-bottom:6px"><%= job.title %></h2>
+  <div style="color:var(--slate); font-size:.92rem">
+    Posted by <%= requester.name %> · Bounty <b style="color:var(--green-dark)"><%= fmtMoney(job.bounty_cents) %></b>
+    <%= job.ai_tool ? ' · Generated with ' + job.ai_tool : '' %> ·
+    <% if (job.status === 'open') { %><span class="tag">Open</span><% } %>
+    <% if (job.status === 'claimed') { %><span class="tag amber">In review</span><% } %>
+    <% if (job.status === 'submitted') { %><span class="tag amber">Awaiting acceptance</span><% } %>
+    <% if (job.status === 'completed') { %><span class="tag navy">Completed</span><% } %>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">Content to verify <span style="color:var(--mist); font-weight:400; font-size:.8rem">sha256: <%= job.content_hash.slice(0, 16) %>…</span></h3>
+    <pre class="content"><%= job.content_text %></pre>
+    <% if (job.instructions) { %><p style="color:var(--slate); font-size:.93rem"><b>Requester's instructions:</b> <%= job.instructions %></p><% } %>
+  </div>
+
+  <% if (job.status === 'open') { %>
+    <div class="panel">
+      <% if (!user) { %>
+        <p style="margin:0"><a href="/login?next=/jobs/<%= job.id %>"><b>Log in</b></a> to claim this job and earn <b><%= fmtMoney(Math.round(job.bounty_cents * 0.85)) %></b>.</p>
+      <% } else if (user.id === job.requester_id) { %>
+        <p style="margin:0; color:var(--slate)">Your job is live on the marketplace, waiting for a reviewer.</p>
+      <% } else { %>
+        <form method="post" action="/jobs/<%= job.id %>/claim" style="display:flex; align-items:center; gap:18px; flex-wrap:wrap">
+          <button class="btn" type="submit">Claim this job</button>
+          <span style="color:var(--slate); font-size:.92rem">You'll complete the <%= CATEGORIES[job.category].checks.length %>-point <%= CATEGORIES[job.category].label.toLowerCase() %> checklist and sign off under your own name. Payout on acceptance: <b><%= fmtMoney(Math.round(job.bounty_cents * 0.85)) %></b>.</span>
+        </form>
+      <% } %>
+    </div>
+  <% } %>
+
+  <% if (job.status === 'claimed' && user && user.id === job.claimed_by) { %>
+    <div class="panel">
+      <h3 style="margin-top:0">Your review</h3>
+      <% if (typeof error !== 'undefined') { %><div class="error">A verified verdict requires every checklist item to pass.</div><% } %>
+      <form class="stack" method="post" action="/jobs/<%= job.id %>/review">
+        <div>
+          <label class="f">Verification checklist — check each item you have personally completed</label>
+          <ul class="checklist">
+            <% CATEGORIES[job.category].checks.forEach((c, i) => { %>
+              <li style="flex-direction:column; align-items:stretch">
+                <label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer"><input type="checkbox" name="check_<%= i %>" style="margin-top:3px"> <span><%= c %></span></label>
+                <input type="text" name="note_<%= i %>" maxlength="500" placeholder="Evidence / note (optional)" style="margin-top:8px; font-size:.86rem">
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+        <div><label class="f">Reviewer comments (visible to requester and on the certificate)</label><textarea name="comments" placeholder="What you verified, what you fixed, what to watch out for…"></textarea></div>
+        <div><label class="f">Corrected version <span style="color:var(--mist);font-weight:400">(optional — if you made edits)</span></label><textarea name="edited_content" placeholder="Paste the corrected content if your verdict is 'verified with edits'"></textarea></div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap">
+          <div style="flex:1; min-width:220px"><label class="f">Verdict</label>
+            <select name="verdict" required>
+              <option value="verified">Verified — accurate as delivered</option>
+              <option value="verified_with_edits">Verified with edits</option>
+              <option value="rejected">Not verifiable — significant problems</option>
+            </select>
+          </div>
+          <div style="width:160px"><label class="f">Minutes spent</label><input type="number" name="minutes_spent" min="1" max="6000" value="30"></div>
+        </div>
+        <button class="btn" type="submit">Submit review &amp; sign off as <%= user.name %></button>
+      </form>
+    </div>
+  <% } else if (job.status === 'claimed') { %>
+    <div class="panel"><p style="margin:0; color:var(--slate)">Claimed by <a href="/u/<%= reviewer.id %>"><%= reviewer.name %></a> — review in progress.</p></div>
+  <% } %>
+
+  <% if (review) { %>
+    <div class="panel">
+      <h3 style="margin-top:0">Review by <a href="/u/<%= review.reviewer_id %>"><%= review.reviewer_name %></a> <span style="color:var(--slate); font-weight:400; font-size:.9rem"><%= review.reviewer_title %></span></h3>
+      <p><span class="tag <%= review.verdict === 'rejected' ? 'red' : '' %>"><%= VERDICTS[review.verdict] %></span> <span style="color:var(--slate); font-size:.88rem">· <%= review.minutes_spent %> min spent</span></p>
+      <ul class="checklist">
+        <% checklist.forEach(c => { %>
+          <li><span class="mark <%= c.passed ? 'ok' : 'no' %>"><%= c.passed ? '✓' : '✕' %></span><div><%= c.label %><% if (c.note) { %><div class="note"><%= c.note %></div><% } %></div></li>
+        <% }) %>
+      </ul>
+      <% if (review.comments) { %><p style="color:var(--slate); font-size:.95rem; margin-bottom:0"><b>Comments:</b> <%= review.comments %></p><% } %>
+      <% if (review.edited_content) { %><h4>Corrected version</h4><pre class="content"><%= review.edited_content %></pre><% } %>
+    </div>
+
+    <% if (job.status === 'submitted' && user && user.id === job.requester_id) { %>
+      <div class="panel" style="border-color:var(--green)">
+        <h3 style="margin-top:0">Accept this review</h3>
+        <p style="color:var(--slate); font-size:.94rem">Accepting releases <b><%= fmtMoney(Math.round(job.bounty_cents * 0.85)) %></b> to the reviewer<%= review.verdict !== 'rejected' ? ' and issues your public verification certificate' : '' %>.</p>
+        <form method="post" action="/jobs/<%= job.id %>/accept" style="display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+          <label class="f" style="margin:0">Rate the review</label>
+          <select name="rating" style="width:90px"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+          <button class="btn" type="submit">Accept &amp; <%= review.verdict !== 'rejected' ? 'issue certificate' : 'close job' %></button>
+        </form>
+      </div>
+    <% } %>
+  <% } %>
+
+  <% if (cert) { %>
+    <div class="notice" style="margin-top:20px">Certificate issued: <a href="/cert/<%= cert.code %>"><b><%= cert.code %></b></a></div>
+  <% } %>
+</div>
+<%- include('partials/foot') %>

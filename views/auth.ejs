@@ -1,0 +1,22 @@
+<%- include('partials/head', { pageTitle: mode === 'signup' ? 'Sign up' : 'Log in' }) %>
+<div class="wrap" style="max-width:460px; padding-top:56px; padding-bottom:80px">
+  <h2 class="title"><%= mode === 'signup' ? 'Create your account' : 'Welcome back' %></h2>
+  <p class="lead" style="font-size:.97rem"><%= mode === 'signup' ? 'One account for both sides of the market — post work, review work, or both. Demo accounts start with $100 in credits.' : 'Log in to your CheckedBy account.' %></p>
+  <div class="panel">
+    <% if (error) { %><div class="error" style="margin-bottom:16px"><%= error %></div><% } %>
+    <form class="stack" method="post" action="/<%= mode %>">
+      <input type="hidden" name="next" value="<%= next %>">
+      <% if (mode === 'signup') { %>
+        <div><label class="f">Full name</label><input type="text" name="name" required maxlength="80" placeholder="Jane Rivera"></div>
+        <div><label class="f">Professional title <span style="color:var(--mist);font-weight:400">(shown on certificates you sign)</span></label><input type="text" name="title" maxlength="120" placeholder="Senior Editor · Data Engineer · CPA"></div>
+      <% } %>
+      <div><label class="f">Email</label><input type="email" name="email" required placeholder="you@company.com"></div>
+      <div><label class="f">Password</label><input type="password" name="password" required minlength="8" placeholder="8+ characters"></div>
+      <button class="btn" type="submit"><%= mode === 'signup' ? 'Create account' : 'Log in' %></button>
+    </form>
+  </div>
+  <p class="hint" style="margin-top:14px">
+    <% if (mode === 'signup') { %>Already have an account? <a href="/login">Log in</a><% } else { %>New here? <a href="/signup">Create an account</a> · Demo login: <code>elena@demo.checkedby.app</code> / <code>demo1234</code><% } %>
+  </p>
+</div>
+<%- include('partials/foot') %>

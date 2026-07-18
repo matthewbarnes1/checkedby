@@ -1,0 +1,21 @@
+<%- include('partials/head', { pageTitle: 'Verify a certificate' }) %>
+<div class="wrap" style="max-width:640px; padding-top:56px; padding-bottom:80px">
+  <div class="kicker">Public verification</div>
+  <h2 class="title">Verify a CheckedBy certificate</h2>
+  <p class="lead" style="font-size:.98rem">Anyone handed an AI-assisted deliverable can confirm here that a real, named human reviewed it — and that the content hasn't changed since.</p>
+  <div class="panel">
+    <form method="get" action="/verify" style="display:flex; gap:12px; flex-wrap:wrap">
+      <input type="text" name="code" placeholder="Certificate code, e.g. CB-XXXX-XXXX" value="<%= code %>" style="flex:1; min-width:220px">
+      <button class="btn" type="submit">Verify</button>
+    </form>
+    <% if (searched) { %>
+      <% if (result) { %>
+        <div class="notice" style="margin-top:16px">✓ Valid certificate. <a href="/cert/<%= result %>"><b>View <%= result %></b></a></div>
+      <% } else { %>
+        <div class="error" style="margin-top:16px">✕ No certificate found with that code. The work may not have been human-verified, or the code was mistyped.</div>
+      <% } %>
+    <% } %>
+  </div>
+  <p class="hint" style="margin-top:14px">Each certificate stores the SHA-256 fingerprint of the exact content that was reviewed. To confirm a document matches its certificate, recompute its hash and compare.</p>
+</div>
+<%- include('partials/foot') %>

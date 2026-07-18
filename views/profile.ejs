@@ -1,0 +1,25 @@
+<%- include('partials/head', { pageTitle: person.name }) %>
+<div class="wrap" style="max-width:720px; padding-top:46px; padding-bottom:80px">
+  <div class="kicker">Reviewer profile</div>
+  <h2 class="title" style="margin-bottom:4px"><%= person.name %></h2>
+  <div style="color:var(--slate); margin-bottom:8px"><%= person.title %></div>
+  <% if (person.bio) { %><p class="lead" style="font-size:.97rem"><%= person.bio %></p><% } %>
+  <div class="statbar" style="margin-top:20px">
+    <div class="stat"><b style="color:var(--green-dark)"><%= person.reviews_done %></b><span style="color:var(--slate)">reviews completed</span></div>
+    <div class="stat"><b style="color:var(--green-dark)"><%= person.rating_count ? (person.rating_sum / person.rating_count).toFixed(1) + ' / 5' : '—' %></b><span style="color:var(--slate)">average rating</span></div>
+    <div class="stat"><b style="color:var(--green-dark)"><%= person.created_at.slice(0, 10) %></b><span style="color:var(--slate)">member since</span></div>
+  </div>
+  <div class="panel">
+    <h3 style="margin-top:0">Signed reviews</h3>
+    <% if (!history.length) { %><p style="color:var(--slate)">No completed reviews yet.</p><% } %>
+    <% if (history.length) { %>
+      <table class="plain"><tr><th>Job</th><th>Category</th><th>Verdict</th><th>Certificate</th></tr>
+      <% for (const h of history) { %>
+        <tr><td><%= h.title %></td><td><span class="tag cat"><%= CATEGORIES[h.category].label %></span></td>
+        <td style="font-size:.85rem"><%= VERDICTS[h.verdict] %></td>
+        <td><% if (h.code) { %><a href="/cert/<%= h.code %>"><%= h.code %></a><% } else { %>—<% } %></td></tr>
+      <% } %></table>
+    <% } %>
+  </div>
+</div>
+<%- include('partials/foot') %>

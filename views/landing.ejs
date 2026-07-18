@@ -1,0 +1,79 @@
+<%- include('partials/head') %>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>AI does the work.<br><em>Real humans</em> make it trustworthy.</h1>
+    <p class="sub">CheckedBy is the open marketplace where vetted experts review, correct, and publicly sign off on AI-generated work — copy, reports, code, translations — in hours.</p>
+    <div class="cta-row">
+      <a class="btn" href="/signup">Get your AI work checked</a>
+      <a class="btn ghost" href="/signup" style="color:#fff">Earn money reviewing</a>
+    </div>
+    <p class="cta-note">Every completed review issues a public, tamper-evident verification certificate.</p>
+    <div class="statbar">
+      <div class="stat"><b><%= stats.certs %></b><span>certificates issued</span></div>
+      <div class="stat"><b><%= stats.experts %></b><span>experts &amp; businesses</span></div>
+      <div class="stat"><b><%= stats.jobs %></b><span>jobs posted</span></div>
+      <div class="stat"><b>Aug 2, 2026</b><span>EU AI Act Art. 50 in force</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="band">
+  <div class="wrap">
+    <div class="kicker">The problem</div>
+    <h2 class="title">Generation is cheap. Trust is the bottleneck.</h2>
+    <p class="lead">In 2026, anyone can generate a report, a campaign, or a codebase in minutes. What clients, customers, and regulators now demand is proof that a qualified human checked it. Unverified AI output — "slop" — costs deals, reputations, and soon, compliance.</p>
+    <div class="grid3">
+      <div class="card"><h3>Clients are pushing back</h3><p>Major buyers and publishers now impose controls on AI-generated submissions. "Sounds plausible" is no longer deliverable quality.</p></div>
+      <div class="card"><h3>Regulation has arrived</h3><p>From August 2, 2026, the EU AI Act requires published AI-generated text on matters of public interest to be disclosed as AI-made — <b>unless a human reviewed it and takes editorial responsibility</b>.</p></div>
+      <div class="card"><h3>Disclosure alone backfires</h3><p>Peer-reviewed research shows that simply labelling work "AI-generated" <i>erodes</i> audience trust. What restores it is demonstrated human oversight. That's the product.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap">
+    <div class="kicker">How it works</div>
+    <h2 class="title">Post it. An expert checks it. You get proof.</h2>
+    <div class="grid3">
+      <div class="card"><div class="stepnum">1</div><h3>Post your AI-generated work</h3><p>Paste the deliverable, say which tool made it, choose what must be checked, and set a bounty. Funds are held in escrow.</p></div>
+      <div class="card"><div class="stepnum">2</div><h3>A vetted expert claims it</h3><p>Editors, engineers, analysts, and compliance pros work through a category-specific checklist: facts traced, code executed, citations confirmed, hallucinations removed.</p></div>
+      <div class="card"><div class="stepnum">3</div><h3>Receive a signed certificate</h3><p>A named human signs off. You get a public certificate page with a content fingerprint, the full checklist, and an embeddable badge for your deliverable.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="kicker">The open market</div>
+    <h2 class="title">Everyone is both producer and consumer</h2>
+    <p class="lead">Like the great peer-to-peer markets, CheckedBy has no fixed sides. The agency that posts marketing copy on Monday can earn as a code reviewer on Tuesday. One account, one wallet, both roles — supply scales with demand because they are the same people.</p>
+    <div class="grid3">
+      <div class="card"><h3>For businesses</h3><p>Ship AI-accelerated work your clients can trust — with evidence, not assurances. Protect your brand from the slop backlash.</p></div>
+      <div class="card"><h3>For experts</h3><p>Turn judgment into income. Layoffs pushed record numbers of skilled professionals into independent work — verification is the skill AI can't replace, because it's the check <i>on</i> AI.</p></div>
+      <div class="card"><h3>For the record</h3><p>Every certificate stores a SHA-256 fingerprint of the exact content reviewed. If the text changes later, the certificate visibly no longer matches.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap">
+    <div class="kicker">Pricing</div>
+    <h2 class="title">Simple, marketplace-native pricing</h2>
+    <div class="pricegrid">
+      <div class="card"><h3>Businesses</h3><div class="price">You set the bounty <small>from $5 per review</small></div><ul class="plist"><li>Pay only per verified deliverable</li><li>Escrow-protected until you accept</li><li>Public certificate + badge included</li></ul></div>
+      <div class="card"><h3>Reviewers</h3><div class="price">85% <small>of every bounty</small></div><ul class="plist"><li>Claim jobs that match your expertise</li><li>Build a public, certified track record</li><li>Paid on acceptance</li></ul></div>
+      <div class="card"><h3>Platform</h3><div class="price">15% <small>fee on completed jobs</small></div><ul class="plist"><li>No subscriptions, no seats</li><li>Free to post, free to browse</li><li>We only earn when verification happens</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap" style="text-align:center">
+    <h2 class="title">The human verification layer for the AI economy.</h2>
+    <p class="lead" style="margin:0 auto 26px">Join as a business, an expert, or both — it's the same door.</p>
+    <a class="btn" href="/signup">Create your free account</a>
+  </div>
+</section>
+
+<%- include('partials/foot') %>

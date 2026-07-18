@@ -1,0 +1,27 @@
+<%- include('partials/head', { pageTitle: 'Marketplace' }) %>
+<div class="wrap" style="padding-top:46px; padding-bottom:80px">
+  <div class="kicker">Marketplace</div>
+  <h2 class="title">Open verification jobs</h2>
+  <p class="lead">Claim a job in your area of expertise, work the checklist, and sign off. You earn 85% of the bounty on acceptance.</p>
+  <div class="tabs">
+    <a class="btn ghost small <%= activeCat==='' ? '' : '' %>" href="/jobs" <%= activeCat==='' ? 'style=border-color:var(--green)' : '' %>>All</a>
+    <% for (const [key, c] of Object.entries(CATEGORIES)) { %>
+      <a class="btn ghost small" href="/jobs?category=<%= key %>" <%= activeCat===key ? 'style=border-color:var(--green)' : '' %>><%= c.label %></a>
+    <% } %>
+  </div>
+  <div class="joblist">
+    <% if (!jobs.length) { %>
+      <div class="panel" style="text-align:center; color:var(--slate)">No open jobs in this category right now. <a href="/jobs/new">Post one</a> — or check back soon.</div>
+    <% } %>
+    <% for (const j of jobs) { %>
+      <a class="jobrow" href="/jobs/<%= j.id %>" style="color:inherit; text-decoration:none">
+        <div class="grow">
+          <h3><%= j.title %></h3>
+          <div class="meta"><span class="tag cat"><%= CATEGORIES[j.category].label %></span> &nbsp;Posted by <%= j.requester_name %><%= j.ai_tool ? ' · Generated with ' + j.ai_tool : '' %> · <%= j.content_text.length.toLocaleString() %> chars</div>
+        </div>
+        <div class="bounty"><%= fmtMoney(j.bounty_cents) %></div>
+      </a>
+    <% } %>
+  </div>
+</div>
+<%- include('partials/foot') %>

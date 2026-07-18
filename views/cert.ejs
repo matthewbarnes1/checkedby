@@ -1,0 +1,43 @@
+<%- include('partials/head', { pageTitle: 'Certificate ' + cert.code }) %>
+<div class="wrap" style="max-width:780px; padding-top:46px; padding-bottom:80px">
+  <div class="cert-frame">
+    <div class="sealrow">
+      <div class="seal"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#06251c" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div>
+        <h1>Certificate of Human Verification</h1>
+        <div class="code"><%= cert.code %> · issued <%= cert.issued_at %> UTC</div>
+      </div>
+    </div>
+
+    <p style="font-size:1.02rem">This certifies that the work titled <b>“<%= job.title %>”</b> — generated <% if (job.ai_tool) { %>with <b><%= job.ai_tool %></b><% } else { %>with the assistance of AI<% } %> — has been personally reviewed by a qualified human expert who signs off on it under their own name.</p>
+
+    <hr class="divider">
+    <dl class="kv">
+      <dt>Reviewed by</dt><dd><a href="/u/<%= review.reviewer_id %>"><%= review.reviewer_name %></a> — <%= review.reviewer_title %></dd>
+      <dt>Verdict</dt><dd><span class="tag <%= review.verdict === 'rejected' ? 'red' : '' %>"><%= VERDICTS[review.verdict] %></span></dd>
+      <dt>Category</dt><dd><%= CATEGORIES[job.category].label %></dd>
+      <dt>Review time</dt><dd><%= review.minutes_spent %> minutes</dd>
+      <dt>Content fingerprint</dt><dd style="font-family:ui-monospace,Menlo,monospace; font-size:.82rem"><%= job.content_hash %></dd>
+      <dt>Reviewed on</dt><dd><%= review.created_at %> UTC</dd>
+    </dl>
+
+    <hr class="divider">
+    <h3 style="margin:0 0 4px">Checks performed</h3>
+    <ul class="checklist">
+      <% checklist.forEach(c => { %>
+        <li><span class="mark <%= c.passed ? 'ok' : 'no' %>"><%= c.passed ? '✓' : '✕' %></span><div><%= c.label %><% if (c.note) { %><div class="note"><%= c.note %></div><% } %></div></li>
+      <% }) %>
+    </ul>
+    <% if (review.comments) { %><p style="color:var(--slate); font-size:.94rem"><b>Reviewer's statement:</b> <%= review.comments %></p><% } %>
+
+    <hr class="divider">
+    <p style="font-size:.85rem; color:var(--slate); margin:0">This content has undergone human review with a named person exercising editorial control, in the manner contemplated by Article 50(4) of the EU AI Act for AI-assisted published text. Verify authenticity of any copy of this work by recomputing its SHA-256 hash and comparing it to the fingerprint above at <b>/verify</b>.</p>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">Embed this badge</h3>
+    <p><img src="/badge/<%= cert.code %>.svg" alt="Human-verified badge" height="36"></p>
+    <pre class="content" style="max-height:90px">&lt;a href="<%= baseUrl %>/cert/<%= cert.code %>"&gt;&lt;img src="<%= baseUrl %>/badge/<%= cert.code %>.svg" alt="Human-verified by CheckedBy" height="36"&gt;&lt;/a&gt;</pre>
+  </div>
+</div>
+<%- include('partials/foot') %>
