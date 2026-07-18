@@ -38,7 +38,8 @@ What this means for you: if we draft your content with AI, we make sure a named 
   q.bumpReviewer.run(5, sofia);
   q.updateBalance.run(3825, sofia);
   q.insertTx.run(sofia, 3825, 'payout', j1, `Payout for job #${j1} (15% platform fee applied)`);
-  q.insertCert.run(certCode(), j1, r1);
+  // Deterministic demo code so every serverless instance seeds the same showpiece certificate
+  q.insertCert.run('CB-DEMO-2026', j1, r1);
 
   // Open jobs
   const content2 = `def dedupe_customers(rows):
